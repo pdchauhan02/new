@@ -1,0 +1,977 @@
+
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ગુજરાતી વસ્તુ સ્ટોક મેનેજમેન્ટ</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f7fb;
+      color: #1e293b;
+      font-family: "Noto Sans Gujarati", sans-serif;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px 18px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      color: #123b30;
+    }
+
+    .subtitle {
+      color: #64748b;
+      margin: 8px 0 0;
+      font-size: 14px;
+    }
+
+    .badge {
+      background: #dcfce7;
+      color: #166534;
+      padding: 8px 13px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card, .panel {
+      background: white;
+      border: 1px solid #e5eaf0;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 3px 12px #0f172a05;
+    }
+
+    .stat-label {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: 700;
+      margin-top: 12px;
+      color: #166534;
+      overflow-wrap: anywhere;
+    }
+
+    .panel {
+      margin-bottom: 22px;
+    }
+
+    .panel h2 {
+      font-size: 19px;
+      margin: 0 0 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      font: inherit;
+      font-size: 14px;
+      background: white;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #16845b;
+      box-shadow: 0 0 0 3px #16a34a15;
+    }
+
+    button {
+      border: none;
+      border-radius: 7px;
+      padding: 10px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: #16734d;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .btn-edit {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .btn-delete {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 17px;
+    }
+
+    .toolbar input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .toolbar select {
+      max-width: 230px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e8edf3;
+      font-size: 13px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    td {
+      overflow-wrap: anywhere;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #64748b;
+    }
+
+    .message {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #166534;
+      min-height: 20px;
+    }
+
+    .message.error {
+      color: #b91c1c;
+    }
+
+    .footer {
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+      padding: 10px;
+    }
+
+    @media (max-width: 760px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .toolbar {
+        flex-direction: column;
+      }
+
+      .toolbar select {
+        max-width: none;
+      }
+
+      h1 {
+        font-size: 21px;
+      }
+
+      input, select {
+        font-size: 16px;
+        min-height: 44px;
+      }
+
+      button {
+        min-height: 44px;
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .form-actions button {
+        width: 100%;
+      }
+
+      table {
+        min-width: 0;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tbody tr {
+        display: block;
+        background: white;
+        border: 1px solid #e5eaf0;
+        border-radius: 12px;
+        margin-bottom: 14px;
+        padding: 8px 0;
+        box-shadow: 0 3px 12px #0f172a05;
+      }
+
+      tbody tr:has(td.empty) {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+
+      tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 10px 14px;
+        border-bottom: 1px solid #f1f5f9;
+        text-align: right;
+      }
+
+      tbody td:last-child {
+        border-bottom: none;
+      }
+
+      tbody td.empty {
+        display: block;
+        text-align: center;
+      }
+
+      tbody td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #475569;
+        text-align: left;
+        flex-shrink: 0;
+      }
+
+      tbody td.empty::before {
+        content: none;
+      }
+
+      tbody td:has(.actions) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+
+      .actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .actions button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 16px 10px;
+      }
+
+      .stat-card, .panel {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header>
+      <div>
+        <h1>વસ્તુ સ્ટોક મેનેજમેન્ટ</h1>
+        <p class="subtitle">
+          કંપની, વસ્તુ, વજન, નંગ અને નેટ ભાવની માહિતી
+        </p>
+      </div>
+
+      <span class="badge">● LocalStorage સક્રિય</span>
+    </header>
+
+    <!-- Dashboard summary -->
+    <section class="stats">
+      <div class="stat-card">
+        <div class="stat-label">કુલ વસ્તુઓ</div>
+        <div class="stat-value" id="totalProducts">0</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">કુલ વજન (કિગ્રા.)</div>
+        <div class="stat-value" id="totalWeight">0</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">કુલ નંગ</div>
+        <div class="stat-value" id="totalPieces">0</div>
+      </div>
+    </section>
+
+    <!-- Add / Edit form -->
+    <section class="panel">
+      <h2 id="formTitle">નવી વસ્તુ ઉમેરો</h2>
+
+      <form id="productForm">
+        <div class="form-grid">
+
+          <div>
+            <label for="company">કંપનીનું નામ *</label>
+            <input
+              id="company"
+              type="text"
+              maxlength="150"
+              placeholder="દા.ત. પટેલ ટ્રેડર્સ"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="productName">વસ્તુનું નામ *</label>
+            <input
+              id="productName"
+              type="text"
+              maxlength="150"
+              placeholder="દા.ત. ઘઉં"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="weight">વજન (કિગ્રા.)</label>
+            <input
+              id="weight"
+              type="number"
+              min="0"
+              step="0.001"
+              placeholder="25"
+              value="0"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="pieces">નંગ *</label>
+            <input
+              id="pieces"
+              type="number"
+              min="0"
+              step="1"
+              placeholder="10"
+              value="0"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="netPrice">નેટ ભાવ (₹) *</label>
+            <input
+              id="netPrice"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="1200"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="category">કેટેગરી</label>
+            <select id="category">
+              <option value="અન્ય">અન્ય</option>
+              <option value="અનાજ">અનાજ</option>
+              <option value="કઠોળ">કઠોળ</option>
+              <option value="મસાલા">મસાલા</option>
+              <option value="તેલ">તેલ</option>
+              <option value="ખાદ્ય પદાર્થ">ખાદ્ય પદાર્થ</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="saveButton">
+            + વસ્તુ ઉમેરો
+          </button>
+
+          <button
+            type="button"
+            class="btn-secondary"
+            id="cancelButton"
+            hidden
+          >
+            રદ કરો
+          </button>
+        </div>
+
+        <div id="message" class="message" role="status"
+             aria-live="polite"></div>
+      </form>
+    </section>
+
+    <!-- Product list -->
+    <section class="panel">
+      <h2>વસ્તુઓની યાદી</h2>
+
+      <div class="toolbar">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="કંપની અથવા વસ્તુનું નામ શોધો..."
+          aria-label="વસ્તુ શોધો"
+        >
+
+        <select id="categoryFilter" aria-label="કેટેગરી પ્રમાણે ફિલ્ટર">
+          <option value="">બધી કેટેગરી</option>
+          <option value="અનાજ">અનાજ</option>
+          <option value="કઠોળ">કઠોળ</option>
+          <option value="મસાલા">મસાલા</option>
+          <option value="તેલ">તેલ</option>
+          <option value="ખાદ્ય પદાર્થ">ખાદ્ય પદાર્થ</option>
+          <option value="અન્ય">અન્ય</option>
+        </select>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ક્રમ</th>
+              <th>કંપનીનું નામ</th>
+              <th>વસ્તુનું નામ</th>
+              <th>કેટેગરી</th>
+              <th>વજન (કિગ્રા.)</th>
+              <th>નંગ</th>
+              <th>નેટ ભાવ (₹)</th>
+              <th>ક્રિયા</th>
+            </tr>
+          </thead>
+
+          <tbody id="productTable">
+            <tr>
+              <td colspan="8" class="empty">લોડ થઈ રહ્યું છે...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" id="resetDemo">
+          ડેમો ડેટા ફરીથી લાવો
+        </button>
+      </div>
+    </section>
+
+    <div class="footer">
+      આ ડેટા તમારા વર્તમાન બ્રાઉઝરમાં સેવ થાય છે.
+    </div>
+  </main>
+
+  <script>
+    "use strict";
+
+    const STORAGE_KEY = "gujarati_inventory_v1";
+
+    const $ = (id) => document.getElementById(id);
+
+    let products = [];
+    let editingId = null;
+
+    // Dummy data: first run only.
+    const demoProducts = [
+      {
+        id: 1,
+        company: "પટેલ ટ્રેડર્સ",
+        name: "ઘઉં",
+        weight: 250,
+        pieces: 10,
+        netPrice: 8000,
+        category: "અનાજ"
+      },
+      {
+        id: 2,
+        company: "શ્રી ગણેશ એન્ટરપ્રાઇઝ",
+        name: "ચોખા",
+        weight: 100,
+        pieces: 5,
+        netPrice: 5800,
+        category: "અનાજ"
+      },
+      {
+        id: 3,
+        company: "અંબિકા ફૂડ્સ",
+        name: "તુવેર દાળ",
+        weight: 50,
+        pieces: 10,
+        netPrice: 6000,
+        category: "કઠોળ"
+      },
+      {
+        id: 4,
+        company: "મહાલક્ષ્મી ટ્રેડર્સ",
+        name: "ખાંડ",
+        weight: 150,
+        pieces: 15,
+        netPrice: 6600,
+        category: "ખાદ્ય પદાર્થ"
+      },
+      {
+        id: 5,
+        company: "જય માતાજી ટ્રેડર્સ",
+        name: "જીરું",
+        weight: 20,
+        pieces: 4,
+        netPrice: 9000,
+        category: "મસાલા"
+      },
+      {
+        id: 6,
+        company: "સૌરાષ્ટ્ર ઓઇલ મિલ",
+        name: "મગફળીનું તેલ",
+        weight: 60,
+        pieces: 12,
+        netPrice: 9600,
+        category: "તેલ"
+      }
+    ];
+
+    function showMessage(message, isError = false) {
+      $("message").textContent = message;
+      $("message").classList.toggle("error", isError);
+    }
+
+    function saveToLocalStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+        return true;
+      } catch (error) {
+        console.error("LocalStorage save failed:", error);
+        showMessage(
+          "ડેટા સેવ થઈ શક્યો નથી. બ્રાઉઝરની સ્ટોરેજ સેટિંગ તપાસો.",
+          true
+        );
+        return false;
+      }
+    }
+
+    function loadFromLocalStorage() {
+      try {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+
+        if (savedData === null) {
+          products = demoProducts.map(product => ({ ...product }));
+
+          if (!saveToLocalStorage()) {
+            products = [];
+          }
+
+          return;
+        }
+
+        const parsedData = JSON.parse(savedData);
+
+        if (!Array.isArray(parsedData)) {
+          throw new Error("Invalid inventory data");
+        }
+
+        products = parsedData;
+      } catch (error) {
+        console.error("LocalStorage load failed:", error);
+        products = [];
+        showMessage(
+          "સેવ કરેલો ડેટા વાંચી શકાયો નથી. ડેમો ડેટા ફરી લાવવા બટન વાપરો.",
+          true
+        );
+      }
+    }
+
+    function formatNumber(value) {
+      return Number(value).toLocaleString("en-IN", {
+        maximumFractionDigits: 3
+      });
+    }
+
+    function formatCurrency(value) {
+      return "₹" + Number(value).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function updateSummary() {
+      $("totalProducts").textContent = formatNumber(products.length);
+
+      const totalWeight = products.reduce(
+        (sum, product) => sum + Number(product.weight), 0
+      );
+
+      const totalPieces = products.reduce(
+        (sum, product) => sum + Number(product.pieces), 0
+      );
+
+      $("totalWeight").textContent = formatNumber(totalWeight);
+      $("totalPieces").textContent = formatNumber(totalPieces);
+    }
+
+    function renderProducts() {
+      const tbody = $("productTable");
+      const search = $("searchInput").value.trim().toLocaleLowerCase();
+      const category = $("categoryFilter").value;
+
+      const filtered = products.filter(product => {
+        const matchesSearch =
+          product.name.toLocaleLowerCase().includes(search) ||
+          product.company.toLocaleLowerCase().includes(search);
+
+        const matchesCategory =
+          !category || product.category === category;
+
+        return matchesSearch && matchesCategory;
+      });
+
+      tbody.replaceChildren();
+
+      if (filtered.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 8;
+        cell.className = "empty";
+        cell.textContent = "કોઈ વસ્તુ મળી નથી.";
+
+        row.appendChild(cell);
+        tbody.appendChild(row);
+      }
+
+      const columnLabels = [
+        "ક્રમ",
+        "કંપનીનું નામ",
+        "વસ્તુનું નામ",
+        "કેટેગરી",
+        "વજન (કિગ્રા.)",
+        "નંગ",
+        "નેટ ભાવ (₹)",
+        "ક્રિયા"
+      ];
+
+      filtered.forEach((product, index) => {
+        const row = document.createElement("tr");
+
+        const values = [
+          index + 1,
+          product.company,
+          product.name,
+          product.category,
+          formatNumber(product.weight),
+          formatNumber(product.pieces),
+          formatCurrency(product.netPrice)
+        ];
+
+        values.forEach((value, valueIndex) => {
+          const cell = document.createElement("td");
+
+          cell.dataset.label = columnLabels[valueIndex];
+          // textContent prevents user-entered HTML from being executed.
+          cell.textContent = String(value);
+          row.appendChild(cell);
+        });
+
+        const actionCell = document.createElement("td");
+        actionCell.dataset.label = columnLabels[7];
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "btn-edit";
+        editButton.textContent = "એડિટ";
+        editButton.addEventListener("click", () => {
+          editProduct(product.id);
+        });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "btn-delete";
+        deleteButton.textContent = "ડિલીટ";
+        deleteButton.addEventListener("click", () => {
+          deleteProduct(product.id);
+        });
+
+        actions.append(editButton, deleteButton);
+        actionCell.appendChild(actions);
+        row.appendChild(actionCell);
+        tbody.appendChild(row);
+      });
+
+      updateSummary();
+    }
+
+    function resetForm() {
+      editingId = null;
+      $("productForm").reset();
+
+      $("formTitle").textContent = "નવી વસ્તુ ઉમેરો";
+      $("saveButton").textContent = "+ વસ્તુ ઉમેરો";
+      $("cancelButton").hidden = true;
+
+      $("weight").value = "0";
+      $("pieces").value = "0";
+    }
+
+    $("productForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const company = $("company").value.trim();
+      const name = $("productName").value.trim();
+      const weight = Number($("weight").value);
+      const pieces = Number($("pieces").value);
+      const netPrice = Number($("netPrice").value);
+      const category = $("category").value;
+
+      if (
+        !company ||
+        !name ||
+        $("netPrice").value.trim() === "" ||
+        !Number.isFinite(weight) ||
+        !Number.isFinite(pieces) ||
+        !Number.isFinite(netPrice) ||
+        weight < 0 ||
+        pieces < 0 ||
+        !Number.isInteger(pieces) ||
+        netPrice < 0
+      ) {
+        showMessage("કૃપા કરીને બધી માહિતી યોગ્ય રીતે ભરો.", true);
+        return;
+      }
+
+      let nextProducts;
+
+      if (editingId !== null) {
+        nextProducts = products.map(product =>
+          product.id === editingId
+            ? {
+                ...product,
+                company,
+                name,
+                weight,
+                pieces,
+                netPrice,
+                category
+              }
+            : product
+        );
+      } else {
+        const newId = products.reduce(
+          (maxId, product) => Math.max(maxId, Number(product.id) || 0),
+          0
+        ) + 1;
+
+        nextProducts = [
+          ...products,
+          {
+            id: newId,
+            company,
+            name,
+            weight,
+            pieces,
+            netPrice,
+            category
+          }
+        ];
+      }
+
+      // Only update the current state after the save succeeds.
+      const previousProducts = products;
+      products = nextProducts;
+
+      if (!saveToLocalStorage()) {
+        products = previousProducts;
+        return;
+      }
+
+      const message = editingId !== null
+        ? "વસ્તુની માહિતી અપડેટ થઈ ગઈ છે."
+        : "નવી વસ્તુ સફળતાપૂર્વક ઉમેરાઈ છે.";
+
+      resetForm();
+      renderProducts();
+      showMessage(message);
+    });
+
+    function editProduct(id) {
+      const product = products.find(item => item.id === id);
+
+      if (!product) return;
+
+      editingId = id;
+
+      $("company").value = product.company;
+      $("productName").value = product.name;
+      $("weight").value = product.weight;
+      $("pieces").value = product.pieces;
+      $("netPrice").value = product.netPrice;
+      $("category").value = product.category;
+
+      $("formTitle").textContent = "વસ્તુની માહિતી એડિટ કરો";
+      $("saveButton").textContent = "માહિતી અપડેટ કરો";
+      $("cancelButton").hidden = false;
+
+      $("company").focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function deleteProduct(id) {
+      const product = products.find(item => item.id === id);
+
+      if (!product) return;
+
+      const confirmed = confirm(
+        `"${product.name}" વસ્તુ ડિલીટ કરવી છે?`
+      );
+
+      if (!confirmed) return;
+
+      const previousProducts = products;
+      products = products.filter(item => item.id !== id);
+
+      if (!saveToLocalStorage()) {
+        products = previousProducts;
+        return;
+      }
+
+      if (editingId === id) {
+        resetForm();
+      }
+
+      renderProducts();
+      showMessage("વસ્તુ સફળતાપૂર્વક ડિલીટ થઈ ગઈ છે.");
+    }
+
+    $("cancelButton").addEventListener("click", () => {
+      resetForm();
+      showMessage("એડિટ રદ કરવામાં આવ્યું છે.");
+    });
+
+    $("searchInput").addEventListener("input", renderProducts);
+
+    $("categoryFilter").addEventListener("change", renderProducts);
+
+    $("resetDemo").addEventListener("click", () => {
+      const confirmed = confirm(
+        "હાલનો બધો ડેટા બદલીને ડેમો ડેટા લાવવો છે?"
+      );
+
+      if (!confirmed) return;
+
+      const previousProducts = products;
+      products = demoProducts.map(product => ({ ...product }));
+
+      if (!saveToLocalStorage()) {
+        products = previousProducts;
+        return;
+      }
+
+      resetForm();
+      renderProducts();
+      showMessage("ડેમો ડેટા ફરીથી લોડ થઈ ગયો છે.");
+    });
+
+    // Initialize the page.
+    loadFromLocalStorage();
+    renderProducts();
+  </script>
+</body>
+</html>
