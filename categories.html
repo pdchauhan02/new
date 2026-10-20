@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>કેટેગરી મેનેજમેન્ટ</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <nav class="topnav" aria-label="મુખ્ય મેનૂ">
+    <div class="topnav-inner">
+      <a class="brand" href="index.html">સ્ટોક મેનેજમેન્ટ</a>
+      <div class="nav-links">
+        <a href="index.html">વસ્તુઓ</a>
+        <a href="categories.html" aria-current="page">કેટેગરી</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <header>
+      <div>
+        <h1>કેટેગરી મેનેજમેન્ટ</h1>
+        <p class="subtitle">
+          કેટેગરી ઉમેરો, એડિટ કરો અને દરેક માટે વજન / નંગ નક્કી કરો
+        </p>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>કેટેગરીની યાદી</h2>
+        <button type="button" class="btn-primary" id="addButton">
+          + કેટેગરી ઉમેરો
+        </button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ક્રમ</th>
+              <th>કેટેગરીનું નામ</th>
+              <th>એકમ</th>
+              <th>વસ્તુઓ</th>
+              <th>ક્રિયા</th>
+            </tr>
+          </thead>
+
+          <tbody id="categoryTable">
+            <tr>
+              <td colspan="5" class="empty">લોડ થઈ રહ્યું છે...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="listMessage" class="message" role="status"
+           aria-live="polite"></div>
+    </section>
+
+    <div class="footer">
+      આ ડેટા તમારા વર્તમાન બ્રાઉઝરમાં સેવ થાય છે.
+    </div>
+  </main>
+
+  <!-- Add / Edit modal -->
+  <dialog id="categoryModal" aria-labelledby="formTitle">
+    <div class="modal-head">
+      <h2 id="formTitle">નવી કેટેગરી ઉમેરો</h2>
+      <button
+        type="button"
+        class="icon-btn btn-close"
+        id="closeModal"
+        aria-label="બંધ કરો"
+        title="બંધ કરો"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <form id="categoryForm" class="modal-body">
+      <div class="form-grid">
+
+        <div>
+          <label for="categoryName">કેટેગરીનું નામ *</label>
+          <input
+            id="categoryName"
+            type="text"
+            maxlength="80"
+            placeholder="દા.ત. ડ્રાયફ્રૂટ"
+            required
+          >
+        </div>
+
+        <fieldset class="unit-toggle">
+          <legend>મૂળ એકમ *</legend>
+          <div class="unit-options">
+            <label>
+              <input type="radio" name="unit" value="kg" checked>
+              <span>વજન (કિગ્રા.)</span>
+            </label>
+            <label>
+              <input type="radio" name="unit" value="piece">
+              <span>નંગ</span>
+            </label>
+          </div>
+        </fieldset>
+
+      </div>
+
+      <p class="field-hint">
+        આ કેટેગરીમાં નવી વસ્તુ ઉમેરતી વખતે આ એકમ આપોઆપ પસંદ થશે.
+        વસ્તુ પ્રમાણે તે બદલી શકાય છે.
+      </p>
+
+      <div id="message" class="message error" role="alert"></div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" id="cancelButton">
+          રદ કરો
+        </button>
+
+        <button type="submit" class="btn-primary" id="saveButton">
+          + કેટેગરી ઉમેરો
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="store.js"></script>
+  <script>
+    "use strict";
+
+    let products = [];
+    let categories = [];
+    let editingId = null;
+
+    function showFormError(message) {
+      $("message").textContent = message;
+    }
+
+    function productCount(name) {
+      return products.filter(product => product.category === name).length;
+    }
+
+    function renderCategories() {
+      const tbody = $("categoryTable");
+
+      tbody.replaceChildren();
+
+      if (categories.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 5;
+        cell.className = "empty";
+        cell.textContent = "કોઈ કેટેગરી નથી.";
+
+        row.appendChild(cell);
+        tbody.appendChild(row);
+      }
+
+      const columnLabels = [
+        "ક્રમ",
+        "કેટેગરીનું નામ",
+        "એકમ",
+        "વસ્તુઓ",
+        "ક્રિયા"
+      ];
+
+      categories.forEach((category, index) => {
+        const row = document.createElement("tr");
+
+        const values = [index + 1, category.name];
+
+        values.forEach((value, valueIndex) => {
+          const cell = document.createElement("td");
+
+          cell.dataset.label = columnLabels[valueIndex];
+          // textContent prevents user-entered HTML from being executed.
+          cell.textContent = String(value);
+          row.appendChild(cell);
+        });
+
+        const unitCell = document.createElement("td");
+        unitCell.dataset.label = columnLabels[2];
+        unitCell.appendChild(createUnitTag(category.unit));
+        row.appendChild(unitCell);
+
+        const countCell = document.createElement("td");
+        countCell.dataset.label = columnLabels[3];
+        countCell.textContent = formatNumber(productCount(category.name));
+        row.appendChild(countCell);
+
+        const actionCell = document.createElement("td");
+        actionCell.dataset.label = columnLabels[4];
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        actions.append(
+          createIconButton("btn-edit", EDIT_ICON, "એડિટ", () => {
+            editCategory(category.id);
+          }),
+          createIconButton("btn-delete", DELETE_ICON, "ડિલીટ", () => {
+            deleteCategory(category.id);
+          })
+        );
+
+        actionCell.appendChild(actions);
+        row.appendChild(actionCell);
+        tbody.appendChild(row);
+      });
+    }
+
+    function resetForm() {
+      editingId = null;
+      $("categoryForm").reset();
+      showFormError("");
+
+      $("formTitle").textContent = "નવી કેટેગરી ઉમેરો";
+      $("saveButton").textContent = "+ કેટેગરી ઉમેરો";
+    }
+
+    function openModal() {
+      $("categoryModal").showModal();
+      $("categoryName").focus();
+    }
+
+    $("addButton").addEventListener("click", () => {
+      resetForm();
+      openModal();
+    });
+
+    $("categoryForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const name = $("categoryName").value.trim();
+      const unit = $("categoryForm").elements.unit.value;
+
+      if (!name || !UNITS[unit]) {
+        showFormError("કૃપા કરીને બધી માહિતી યોગ્ય રીતે ભરો.");
+        return;
+      }
+
+      const duplicate = categories.some(category =>
+        category.id !== editingId &&
+        category.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+      );
+
+      if (duplicate) {
+        showFormError(`"${name}" કેટેગરી પહેલેથી છે.`);
+        return;
+      }
+
+      let nextCategories;
+      let nextProducts = products;
+
+      if (editingId !== null) {
+        const oldName = categories.find(item => item.id === editingId).name;
+
+        nextCategories = categories.map(category =>
+          category.id === editingId ? { ...category, name, unit } : category
+        );
+
+        // Renaming a category also renames it on its products.
+        if (oldName !== name) {
+          nextProducts = products.map(product =>
+            product.category === oldName
+              ? { ...product, category: name }
+              : product
+          );
+        }
+      } else {
+        nextCategories = [
+          ...categories,
+          { id: nextId(categories), name, unit }
+        ];
+      }
+
+      const entries = [
+        { key: CATEGORIES_KEY, value: nextCategories, previous: categories }
+      ];
+
+      if (nextProducts !== products) {
+        entries.push(
+          { key: PRODUCTS_KEY, value: nextProducts, previous: products }
+        );
+      }
+
+      // Only update the current state after the save succeeds.
+      if (!saveLists(entries)) {
+        showFormError(SAVE_ERROR);
+        return;
+      }
+
+      categories = nextCategories;
+      products = nextProducts;
+
+      const message = editingId !== null
+        ? "કેટેગરી અપડેટ થઈ ગઈ છે."
+        : "નવી કેટેગરી સફળતાપૂર્વક ઉમેરાઈ છે.";
+
+      $("categoryModal").close();
+      renderCategories();
+      showMessage("listMessage", message);
+    });
+
+    function editCategory(id) {
+      const category = categories.find(item => item.id === id);
+
+      if (!category) return;
+
+      resetForm();
+      editingId = id;
+
+      $("categoryName").value = category.name;
+      $("categoryForm").elements.unit.value = category.unit;
+
+      $("formTitle").textContent = "કેટેગરી એડિટ કરો";
+      $("saveButton").textContent = "કેટેગરી અપડેટ કરો";
+
+      openModal();
+    }
+
+    function deleteCategory(id) {
+      const category = categories.find(item => item.id === id);
+
+      if (!category) return;
+
+      const count = productCount(category.name);
+
+      if (count > 0) {
+        showMessage(
+          "listMessage",
+          `"${category.name}" કેટેગરીમાં ${count} વસ્તુઓ છે. ` +
+            "પહેલાં તે વસ્તુઓની કેટેગરી બદલો અથવા ડિલીટ કરો.",
+          true
+        );
+        return;
+      }
+
+      const confirmed = confirm(
+        `"${category.name}" કેટેગરી ડિલીટ કરવી છે?`
+      );
+
+      if (!confirmed) return;
+
+      const nextCategories = categories.filter(item => item.id !== id);
+
+      if (!saveList(CATEGORIES_KEY, nextCategories)) {
+        showMessage("listMessage", SAVE_ERROR, true);
+        return;
+      }
+
+      categories = nextCategories;
+      renderCategories();
+      showMessage("listMessage", "કેટેગરી સફળતાપૂર્વક ડિલીટ થઈ ગઈ છે.");
+    }
+
+    setupModal(
+      $("categoryModal"),
+      [$("cancelButton"), $("closeModal")],
+      resetForm
+    );
+
+    // Initialize the page.
+    const data = loadData();
+    products = data.products;
+    categories = data.categories;
+
+    if (!data.ok) {
+      showMessage(
+        "listMessage",
+        "સેવ કરેલો ડેટા વાંચી શકાયો નથી.",
+        true
+      );
+    }
+
+    renderCategories();
+  </script>
+</body>
+</html>

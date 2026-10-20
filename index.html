@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="gu">
 <head>
@@ -9,501 +8,39 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background: #f4f7fb;
-      color: #1e293b;
-      font-family: "Noto Sans Gujarati", sans-serif;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 25px 18px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 25px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 26px;
-      color: #123b30;
-    }
-
-    .subtitle {
-      color: #64748b;
-      margin: 8px 0 0;
-      font-size: 14px;
-    }
-
-    .badge {
-      background: #dcfce7;
-      color: #166534;
-      padding: 8px 13px;
-      border-radius: 20px;
-      font-size: 13px;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 22px;
-    }
-
-    .stat-card, .panel {
-      background: white;
-      border: 1px solid #e5eaf0;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 3px 12px #0f172a05;
-    }
-
-    .stat-label {
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    .stat-value {
-      font-size: 25px;
-      font-weight: 700;
-      margin-top: 12px;
-      color: #166534;
-      overflow-wrap: anywhere;
-    }
-
-    .panel {
-      margin-bottom: 22px;
-    }
-
-    .panel h2 {
-      font-size: 19px;
-      margin: 0 0 20px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 17px;
-    }
-
-    label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 7px;
-      font: inherit;
-      font-size: 14px;
-      background: white;
-      outline: none;
-    }
-
-    input:focus, select:focus {
-      border-color: #16845b;
-      box-shadow: 0 0 0 3px #16a34a15;
-    }
-
-    button {
-      border: none;
-      border-radius: 7px;
-      padding: 10px 14px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .btn-primary {
-      background: #16734d;
-      color: white;
-    }
-
-    .btn-secondary {
-      background: #e2e8f0;
-      color: #334155;
-    }
-
-    .btn-edit {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    .btn-delete {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 17px;
-    }
-
-    .toolbar input {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .toolbar select {
-      max-width: 230px;
-    }
-
-    .table-wrapper {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 850px;
-    }
-
-    th, td {
-      padding: 14px 12px;
-      text-align: left;
-      border-bottom: 1px solid #e8edf3;
-      font-size: 13px;
-    }
-
-    th {
-      background: #f8fafc;
-      color: #475569;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    td {
-      overflow-wrap: anywhere;
-    }
-
-    .actions {
-      display: flex;
-      gap: 7px;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 30px;
-      color: #64748b;
-    }
-
-    .message {
-      margin-top: 14px;
-      font-size: 13px;
-      color: #166534;
-      min-height: 20px;
-    }
-
-    .message.error {
-      color: #b91c1c;
-    }
-
-    .footer {
-      text-align: center;
-      color: #64748b;
-      font-size: 12px;
-      padding: 10px;
-    }
-
-    @media (max-width: 760px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .form-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .toolbar {
-        flex-direction: column;
-      }
-
-      .toolbar select {
-        max-width: none;
-      }
-
-      h1 {
-        font-size: 21px;
-      }
-
-      input, select {
-        font-size: 16px;
-        min-height: 44px;
-      }
-
-      button {
-        min-height: 44px;
-        padding: 12px 16px;
-        font-size: 14px;
-      }
-
-      .form-actions {
-        flex-direction: column;
-      }
-
-      .form-actions button {
-        width: 100%;
-      }
-
-      table {
-        min-width: 0;
-      }
-
-      thead {
-        display: none;
-      }
-
-      tbody tr {
-        display: block;
-        background: white;
-        border: 1px solid #e5eaf0;
-        border-radius: 12px;
-        margin-bottom: 14px;
-        padding: 8px 0;
-        box-shadow: 0 3px 12px #0f172a05;
-      }
-
-      tbody tr:has(td.empty) {
-        border: none;
-        box-shadow: none;
-        padding: 0;
-      }
-
-      tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 10px 14px;
-        border-bottom: 1px solid #f1f5f9;
-        text-align: right;
-      }
-
-      tbody td:last-child {
-        border-bottom: none;
-      }
-
-      tbody td.empty {
-        display: block;
-        text-align: center;
-      }
-
-      tbody td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        color: #475569;
-        text-align: left;
-        flex-shrink: 0;
-      }
-
-      tbody td.empty::before {
-        content: none;
-      }
-
-      tbody td:has(.actions) {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-      }
-
-      .actions {
-        flex-direction: column;
-        width: 100%;
-      }
-
-      .actions button {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .container {
-        padding: 16px 10px;
-      }
-
-      .stat-card, .panel {
-        padding: 15px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <nav class="topnav" aria-label="મુખ્ય મેનૂ">
+    <div class="topnav-inner">
+      <a class="brand" href="index.html">સ્ટોક મેનેજમેન્ટ</a>
+      <div class="nav-links">
+        <a href="index.html" aria-current="page">વસ્તુઓ</a>
+        <a href="categories.html">કેટેગરી</a>
+      </div>
+    </div>
+  </nav>
+
   <main class="container">
 
     <header>
       <div>
         <h1>વસ્તુ સ્ટોક મેનેજમેન્ટ</h1>
         <p class="subtitle">
-          કંપની, વસ્તુ, વજન, નંગ અને નેટ ભાવની માહિતી
+          કંપની, વસ્તુ, વજન / નંગ અને નેટ ભાવની માહિતી
         </p>
       </div>
-
-      <span class="badge">● LocalStorage સક્રિય</span>
     </header>
-
-    <!-- Dashboard summary -->
-    <section class="stats">
-      <div class="stat-card">
-        <div class="stat-label">કુલ વસ્તુઓ</div>
-        <div class="stat-value" id="totalProducts">0</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">કુલ વજન (કિગ્રા.)</div>
-        <div class="stat-value" id="totalWeight">0</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">કુલ નંગ</div>
-        <div class="stat-value" id="totalPieces">0</div>
-      </div>
-    </section>
-
-    <!-- Add / Edit form -->
-    <section class="panel">
-      <h2 id="formTitle">નવી વસ્તુ ઉમેરો</h2>
-
-      <form id="productForm">
-        <div class="form-grid">
-
-          <div>
-            <label for="company">કંપનીનું નામ *</label>
-            <input
-              id="company"
-              type="text"
-              maxlength="150"
-              placeholder="દા.ત. પટેલ ટ્રેડર્સ"
-              required
-            >
-          </div>
-
-          <div>
-            <label for="productName">વસ્તુનું નામ *</label>
-            <input
-              id="productName"
-              type="text"
-              maxlength="150"
-              placeholder="દા.ત. ઘઉં"
-              required
-            >
-          </div>
-
-          <div>
-            <label for="weight">વજન (કિગ્રા.)</label>
-            <input
-              id="weight"
-              type="number"
-              min="0"
-              step="0.001"
-              placeholder="25"
-              value="0"
-              required
-            >
-          </div>
-
-          <div>
-            <label for="pieces">નંગ *</label>
-            <input
-              id="pieces"
-              type="number"
-              min="0"
-              step="1"
-              placeholder="10"
-              value="0"
-              required
-            >
-          </div>
-
-          <div>
-            <label for="netPrice">નેટ ભાવ (₹) *</label>
-            <input
-              id="netPrice"
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder="1200"
-              required
-            >
-          </div>
-
-          <div>
-            <label for="category">કેટેગરી</label>
-            <select id="category">
-              <option value="અન્ય">અન્ય</option>
-              <option value="અનાજ">અનાજ</option>
-              <option value="કઠોળ">કઠોળ</option>
-              <option value="મસાલા">મસાલા</option>
-              <option value="તેલ">તેલ</option>
-              <option value="ખાદ્ય પદાર્થ">ખાદ્ય પદાર્થ</option>
-            </select>
-          </div>
-
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn-primary" id="saveButton">
-            + વસ્તુ ઉમેરો
-          </button>
-
-          <button
-            type="button"
-            class="btn-secondary"
-            id="cancelButton"
-            hidden
-          >
-            રદ કરો
-          </button>
-        </div>
-
-        <div id="message" class="message" role="status"
-             aria-live="polite"></div>
-      </form>
-    </section>
 
     <!-- Product list -->
     <section class="panel">
-      <h2>વસ્તુઓની યાદી</h2>
+      <div class="panel-head">
+        <h2>વસ્તુઓની યાદી</h2>
+        <button type="button" class="btn-primary" id="addButton">
+          + વસ્તુ ઉમેરો
+        </button>
+      </div>
 
       <div class="toolbar">
         <input
@@ -515,25 +52,18 @@
 
         <select id="categoryFilter" aria-label="કેટેગરી પ્રમાણે ફિલ્ટર">
           <option value="">બધી કેટેગરી</option>
-          <option value="અનાજ">અનાજ</option>
-          <option value="કઠોળ">કઠોળ</option>
-          <option value="મસાલા">મસાલા</option>
-          <option value="તેલ">તેલ</option>
-          <option value="ખાદ્ય પદાર્થ">ખાદ્ય પદાર્થ</option>
-          <option value="અન્ય">અન્ય</option>
         </select>
       </div>
 
       <div class="table-wrapper">
-        <table>
+        <table class="wide">
           <thead>
             <tr>
               <th>ક્રમ</th>
               <th>કંપનીનું નામ</th>
               <th>વસ્તુનું નામ</th>
               <th>કેટેગરી</th>
-              <th>વજન (કિગ્રા.)</th>
-              <th>નંગ</th>
+              <th>જથ્થો (વજન / નંગ)</th>
               <th>નેટ ભાવ (₹)</th>
               <th>ક્રિયા</th>
             </tr>
@@ -541,11 +71,14 @@
 
           <tbody id="productTable">
             <tr>
-              <td colspan="8" class="empty">લોડ થઈ રહ્યું છે...</td>
+              <td colspan="7" class="empty">લોડ થઈ રહ્યું છે...</td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <div id="listMessage" class="message" role="status"
+           aria-live="polite"></div>
 
       <div class="form-actions">
         <button type="button" class="btn-secondary" id="resetDemo">
@@ -559,150 +92,153 @@
     </div>
   </main>
 
+  <!-- Add / Edit modal -->
+  <dialog id="productModal" aria-labelledby="formTitle">
+    <div class="modal-head">
+      <h2 id="formTitle">નવી વસ્તુ ઉમેરો</h2>
+      <button
+        type="button"
+        class="icon-btn btn-close"
+        id="closeModal"
+        aria-label="બંધ કરો"
+        title="બંધ કરો"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <form id="productForm" class="modal-body">
+      <div class="form-grid">
+
+        <div>
+          <label for="company">કંપનીનું નામ *</label>
+          <input
+            id="company"
+            type="text"
+            maxlength="150"
+            placeholder="દા.ત. પટેલ ટ્રેડર્સ"
+            required
+          >
+        </div>
+
+        <div>
+          <label for="productName">વસ્તુનું નામ *</label>
+          <input
+            id="productName"
+            type="text"
+            maxlength="150"
+            placeholder="દા.ત. ઘઉં"
+            required
+          >
+        </div>
+
+        <div>
+          <div class="label-row">
+            <label for="category">કેટેગરી *</label>
+            <a class="field-link" href="categories.html">+ નવી કેટેગરી</a>
+          </div>
+          <select id="category" required></select>
+        </div>
+
+        <fieldset class="unit-toggle">
+          <legend>એકમ *</legend>
+          <div class="unit-options">
+            <label>
+              <input type="radio" name="unit" value="kg" checked>
+              <span>વજન (કિગ્રા.)</span>
+            </label>
+            <label>
+              <input type="radio" name="unit" value="piece">
+              <span>નંગ</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div>
+          <label for="quantity" id="quantityLabel">જથ્થો (કિગ્રા.) *</label>
+          <input
+            id="quantity"
+            type="number"
+            min="0"
+            step="0.001"
+            placeholder="25"
+            required
+          >
+        </div>
+
+        <div>
+          <label for="netPrice">નેટ ભાવ (₹) *</label>
+          <input
+            id="netPrice"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="1200"
+            required
+          >
+        </div>
+
+      </div>
+
+      <div id="message" class="message error" role="alert"></div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" id="cancelButton">
+          રદ કરો
+        </button>
+
+        <button type="submit" class="btn-primary" id="saveButton">
+          + વસ્તુ ઉમેરો
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="store.js"></script>
   <script>
     "use strict";
 
-    const STORAGE_KEY = "gujarati_inventory_v1";
-
-    const $ = (id) => document.getElementById(id);
-
     let products = [];
+    let categories = [];
     let editingId = null;
 
-    // Dummy data: first run only.
-    const demoProducts = [
-      {
-        id: 1,
-        company: "પટેલ ટ્રેડર્સ",
-        name: "ઘઉં",
-        weight: 250,
-        pieces: 10,
-        netPrice: 8000,
-        category: "અનાજ"
-      },
-      {
-        id: 2,
-        company: "શ્રી ગણેશ એન્ટરપ્રાઇઝ",
-        name: "ચોખા",
-        weight: 100,
-        pieces: 5,
-        netPrice: 5800,
-        category: "અનાજ"
-      },
-      {
-        id: 3,
-        company: "અંબિકા ફૂડ્સ",
-        name: "તુવેર દાળ",
-        weight: 50,
-        pieces: 10,
-        netPrice: 6000,
-        category: "કઠોળ"
-      },
-      {
-        id: 4,
-        company: "મહાલક્ષ્મી ટ્રેડર્સ",
-        name: "ખાંડ",
-        weight: 150,
-        pieces: 15,
-        netPrice: 6600,
-        category: "ખાદ્ય પદાર્થ"
-      },
-      {
-        id: 5,
-        company: "જય માતાજી ટ્રેડર્સ",
-        name: "જીરું",
-        weight: 20,
-        pieces: 4,
-        netPrice: 9000,
-        category: "મસાલા"
-      },
-      {
-        id: 6,
-        company: "સૌરાષ્ટ્ર ઓઇલ મિલ",
-        name: "મગફળીનું તેલ",
-        weight: 60,
-        pieces: 12,
-        netPrice: 9600,
-        category: "તેલ"
-      }
-    ];
-
-    function showMessage(message, isError = false) {
+    function showFormError(message) {
       $("message").textContent = message;
-      $("message").classList.toggle("error", isError);
     }
 
-    function saveToLocalStorage() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-        return true;
-      } catch (error) {
-        console.error("LocalStorage save failed:", error);
-        showMessage(
-          "ડેટા સેવ થઈ શક્યો નથી. બ્રાઉઝરની સ્ટોરેજ સેટિંગ તપાસો.",
-          true
-        );
-        return false;
-      }
+    function categoryUnit(name) {
+      const category = categories.find(item => item.name === name);
+      return category ? category.unit : "kg";
     }
 
-    function loadFromLocalStorage() {
-      try {
-        const savedData = localStorage.getItem(STORAGE_KEY);
+    function setUnit(unit) {
+      const value = UNITS[unit] ? unit : "kg";
 
-        if (savedData === null) {
-          products = demoProducts.map(product => ({ ...product }));
-
-          if (!saveToLocalStorage()) {
-            products = [];
-          }
-
-          return;
-        }
-
-        const parsedData = JSON.parse(savedData);
-
-        if (!Array.isArray(parsedData)) {
-          throw new Error("Invalid inventory data");
-        }
-
-        products = parsedData;
-      } catch (error) {
-        console.error("LocalStorage load failed:", error);
-        products = [];
-        showMessage(
-          "સેવ કરેલો ડેટા વાંચી શકાયો નથી. ડેમો ડેટા ફરી લાવવા બટન વાપરો.",
-          true
-        );
-      }
+      $("productForm").elements.unit.value = value;
+      $("quantityLabel").textContent = `જથ્થો (${UNITS[value].short}) *`;
+      $("quantity").step = UNITS[value].step;
     }
 
-    function formatNumber(value) {
-      return Number(value).toLocaleString("en-IN", {
-        maximumFractionDigits: 3
+    function renderCategoryOptions() {
+      const filter = $("categoryFilter");
+      const current = filter.value;
+
+      filter.replaceChildren(new Option("બધી કેટેગરી", ""));
+      categories.forEach(category => {
+        filter.add(new Option(category.name, category.name));
       });
-    }
+      filter.value = categories.some(item => item.name === current)
+        ? current
+        : "";
 
-    function formatCurrency(value) {
-      return "₹" + Number(value).toLocaleString("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+      const select = $("category");
+      select.replaceChildren();
+      categories.forEach(category => {
+        select.add(new Option(category.name, category.name));
       });
-    }
-
-    function updateSummary() {
-      $("totalProducts").textContent = formatNumber(products.length);
-
-      const totalWeight = products.reduce(
-        (sum, product) => sum + Number(product.weight), 0
-      );
-
-      const totalPieces = products.reduce(
-        (sum, product) => sum + Number(product.pieces), 0
-      );
-
-      $("totalWeight").textContent = formatNumber(totalWeight);
-      $("totalPieces").textContent = formatNumber(totalPieces);
     }
 
     function renderProducts() {
@@ -727,7 +263,7 @@
         const row = document.createElement("tr");
         const cell = document.createElement("td");
 
-        cell.colSpan = 8;
+        cell.colSpan = 7;
         cell.className = "empty";
         cell.textContent = "કોઈ વસ્તુ મળી નથી.";
 
@@ -740,8 +276,7 @@
         "કંપનીનું નામ",
         "વસ્તુનું નામ",
         "કેટેગરી",
-        "વજન (કિગ્રા.)",
-        "નંગ",
+        "જથ્થો",
         "નેટ ભાવ (₹)",
         "ક્રિયા"
       ];
@@ -754,8 +289,7 @@
           product.company,
           product.name,
           product.category,
-          formatNumber(product.weight),
-          formatNumber(product.pieces),
+          formatQuantity(product),
           formatCurrency(product.netPrice)
         ];
 
@@ -769,126 +303,121 @@
         });
 
         const actionCell = document.createElement("td");
-        actionCell.dataset.label = columnLabels[7];
+        actionCell.dataset.label = columnLabels[6];
 
         const actions = document.createElement("div");
         actions.className = "actions";
 
-        const editButton = document.createElement("button");
-        editButton.type = "button";
-        editButton.className = "btn-edit";
-        editButton.textContent = "એડિટ";
-        editButton.addEventListener("click", () => {
-          editProduct(product.id);
-        });
+        actions.append(
+          createIconButton("btn-edit", EDIT_ICON, "એડિટ", () => {
+            editProduct(product.id);
+          }),
+          createIconButton("btn-delete", DELETE_ICON, "ડિલીટ", () => {
+            deleteProduct(product.id);
+          })
+        );
 
-        const deleteButton = document.createElement("button");
-        deleteButton.type = "button";
-        deleteButton.className = "btn-delete";
-        deleteButton.textContent = "ડિલીટ";
-        deleteButton.addEventListener("click", () => {
-          deleteProduct(product.id);
-        });
-
-        actions.append(editButton, deleteButton);
         actionCell.appendChild(actions);
         row.appendChild(actionCell);
         tbody.appendChild(row);
       });
-
-      updateSummary();
     }
 
     function resetForm() {
       editingId = null;
       $("productForm").reset();
+      showFormError("");
 
       $("formTitle").textContent = "નવી વસ્તુ ઉમેરો";
       $("saveButton").textContent = "+ વસ્તુ ઉમેરો";
-      $("cancelButton").hidden = true;
 
-      $("weight").value = "0";
-      $("pieces").value = "0";
+      setUnit(categoryUnit($("category").value));
     }
+
+    function openModal() {
+      $("productModal").showModal();
+      $("company").focus();
+
+      if (categories.length === 0) {
+        showFormError("પહેલાં કેટેગરી ઉમેરો (ઉપર \"+ નવી કેટેગરી\" લિંક).");
+      }
+    }
+
+    $("addButton").addEventListener("click", () => {
+      resetForm();
+      openModal();
+    });
+
+    // Picking a category pre-selects its default unit.
+    $("category").addEventListener("change", () => {
+      setUnit(categoryUnit($("category").value));
+    });
+
+    $("productForm").addEventListener("change", (event) => {
+      if (event.target.name === "unit") setUnit(event.target.value);
+    });
 
     $("productForm").addEventListener("submit", function(event) {
       event.preventDefault();
 
       const company = $("company").value.trim();
       const name = $("productName").value.trim();
-      const weight = Number($("weight").value);
-      const pieces = Number($("pieces").value);
-      const netPrice = Number($("netPrice").value);
       const category = $("category").value;
+      const unit = $("productForm").elements.unit.value;
+      const quantity = Number($("quantity").value);
+      const netPrice = Number($("netPrice").value);
+
+      if (!category) {
+        showFormError("કૃપા કરીને કેટેગરી પસંદ કરો.");
+        return;
+      }
 
       if (
         !company ||
         !name ||
+        !UNITS[unit] ||
+        $("quantity").value.trim() === "" ||
         $("netPrice").value.trim() === "" ||
-        !Number.isFinite(weight) ||
-        !Number.isFinite(pieces) ||
+        !Number.isFinite(quantity) ||
         !Number.isFinite(netPrice) ||
-        weight < 0 ||
-        pieces < 0 ||
-        !Number.isInteger(pieces) ||
+        quantity < 0 ||
         netPrice < 0
       ) {
-        showMessage("કૃપા કરીને બધી માહિતી યોગ્ય રીતે ભરો.", true);
+        showFormError("કૃપા કરીને બધી માહિતી યોગ્ય રીતે ભરો.");
         return;
       }
 
+      if (unit === "piece" && !Number.isInteger(quantity)) {
+        showFormError("નંગ પૂર્ણ સંખ્યામાં લખો (દા.ત. 10).");
+        return;
+      }
+
+      const fields = { company, name, category, unit, quantity, netPrice };
       let nextProducts;
 
       if (editingId !== null) {
         nextProducts = products.map(product =>
-          product.id === editingId
-            ? {
-                ...product,
-                company,
-                name,
-                weight,
-                pieces,
-                netPrice,
-                category
-              }
-            : product
+          product.id === editingId ? { ...product, ...fields } : product
         );
       } else {
-        const newId = products.reduce(
-          (maxId, product) => Math.max(maxId, Number(product.id) || 0),
-          0
-        ) + 1;
-
-        nextProducts = [
-          ...products,
-          {
-            id: newId,
-            company,
-            name,
-            weight,
-            pieces,
-            netPrice,
-            category
-          }
-        ];
+        nextProducts = [...products, { id: nextId(products), ...fields }];
       }
 
       // Only update the current state after the save succeeds.
-      const previousProducts = products;
-      products = nextProducts;
-
-      if (!saveToLocalStorage()) {
-        products = previousProducts;
+      if (!saveList(PRODUCTS_KEY, nextProducts)) {
+        showFormError(SAVE_ERROR);
         return;
       }
+
+      products = nextProducts;
 
       const message = editingId !== null
         ? "વસ્તુની માહિતી અપડેટ થઈ ગઈ છે."
         : "નવી વસ્તુ સફળતાપૂર્વક ઉમેરાઈ છે.";
 
-      resetForm();
+      $("productModal").close();
       renderProducts();
-      showMessage(message);
+      showMessage("listMessage", message);
     });
 
     function editProduct(id) {
@@ -896,21 +425,20 @@
 
       if (!product) return;
 
+      resetForm();
       editingId = id;
 
       $("company").value = product.company;
       $("productName").value = product.name;
-      $("weight").value = product.weight;
-      $("pieces").value = product.pieces;
-      $("netPrice").value = product.netPrice;
       $("category").value = product.category;
+      setUnit(product.unit);
+      $("quantity").value = product.quantity;
+      $("netPrice").value = product.netPrice;
 
       $("formTitle").textContent = "વસ્તુની માહિતી એડિટ કરો";
       $("saveButton").textContent = "માહિતી અપડેટ કરો";
-      $("cancelButton").hidden = false;
 
-      $("company").focus();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      openModal();
     }
 
     function deleteProduct(id) {
@@ -924,26 +452,23 @@
 
       if (!confirmed) return;
 
-      const previousProducts = products;
-      products = products.filter(item => item.id !== id);
+      const nextProducts = products.filter(item => item.id !== id);
 
-      if (!saveToLocalStorage()) {
-        products = previousProducts;
+      if (!saveList(PRODUCTS_KEY, nextProducts)) {
+        showMessage("listMessage", SAVE_ERROR, true);
         return;
       }
 
-      if (editingId === id) {
-        resetForm();
-      }
-
+      products = nextProducts;
       renderProducts();
-      showMessage("વસ્તુ સફળતાપૂર્વક ડિલીટ થઈ ગઈ છે.");
+      showMessage("listMessage", "વસ્તુ સફળતાપૂર્વક ડિલીટ થઈ ગઈ છે.");
     }
 
-    $("cancelButton").addEventListener("click", () => {
-      resetForm();
-      showMessage("એડિટ રદ કરવામાં આવ્યું છે.");
-    });
+    setupModal(
+      $("productModal"),
+      [$("cancelButton"), $("closeModal")],
+      resetForm
+    );
 
     $("searchInput").addEventListener("input", renderProducts);
 
@@ -951,26 +476,46 @@
 
     $("resetDemo").addEventListener("click", () => {
       const confirmed = confirm(
-        "હાલનો બધો ડેટા બદલીને ડેમો ડેટા લાવવો છે?"
+        "હાલનો બધો ડેટા (વસ્તુઓ અને કેટેગરી) બદલીને ડેમો ડેટા લાવવો છે?"
       );
 
       if (!confirmed) return;
 
-      const previousProducts = products;
-      products = demoProducts.map(product => ({ ...product }));
+      const nextProducts = cloneList(demoProducts);
+      const nextCategories = cloneList(demoCategories);
 
-      if (!saveToLocalStorage()) {
-        products = previousProducts;
+      const saved = saveLists([
+        { key: PRODUCTS_KEY, value: nextProducts, previous: products },
+        { key: CATEGORIES_KEY, value: nextCategories, previous: categories }
+      ]);
+
+      if (!saved) {
+        showMessage("listMessage", SAVE_ERROR, true);
         return;
       }
 
-      resetForm();
+      products = nextProducts;
+      categories = nextCategories;
+
+      renderCategoryOptions();
       renderProducts();
-      showMessage("ડેમો ડેટા ફરીથી લોડ થઈ ગયો છે.");
+      showMessage("listMessage", "ડેમો ડેટા ફરીથી લોડ થઈ ગયો છે.");
     });
 
     // Initialize the page.
-    loadFromLocalStorage();
+    const data = loadData();
+    products = data.products;
+    categories = data.categories;
+
+    if (!data.ok) {
+      showMessage(
+        "listMessage",
+        "સેવ કરેલો ડેટા વાંચી શકાયો નથી. ડેમો ડેટા ફરી લાવવા બટન વાપરો.",
+        true
+      );
+    }
+
+    renderCategoryOptions();
     renderProducts();
   </script>
 </body>
