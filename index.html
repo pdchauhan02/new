@@ -51,8 +51,8 @@
           aria-label="વસ્તુ શોધો"
         >
 
-        <select id="categoryFilter" aria-label="કેટેગરી પ્રમાણે ફિલ્ટર">
-          <option value="">બધી કેટેગરી</option>
+        <select id="companyFilter" aria-label="કંપની પ્રમાણે ફિલ્ટર">
+          <option value="">બધી કંપનીઓ</option>
         </select>
       </div>
 
@@ -63,8 +63,6 @@
               <th>ક્રમ</th>
               <th>કંપનીનું નામ</th>
               <th>વસ્તુનું નામ</th>
-              <th>કેટેગરી</th>
-              <th>જથ્થો (વજન / નંગ)</th>
               <th>નેટ ભાવ (₹)</th>
               <th>ક્રિયા</th>
             </tr>
@@ -72,7 +70,7 @@
 
           <tbody id="productTable">
             <tr>
-              <td colspan="7" class="empty">લોડ થઈ રહ્યું છે...</td>
+              <td colspan="5" class="empty">લોડ થઈ રહ્યું છે...</td>
             </tr>
           </tbody>
         </table>
@@ -137,40 +135,6 @@
         </div>
 
         <div>
-          <div class="label-row">
-            <label for="category">કેટેગરી *</label>
-            <a class="field-link" href="categories.html">+ નવી કેટેગરી</a>
-          </div>
-          <select id="category" required></select>
-        </div>
-
-        <fieldset class="unit-toggle">
-          <legend>એકમ *</legend>
-          <div class="unit-options">
-            <label>
-              <input type="radio" name="unit" value="kg" checked>
-              <span>વજન (કિગ્રા.)</span>
-            </label>
-            <label>
-              <input type="radio" name="unit" value="piece">
-              <span>નંગ</span>
-            </label>
-          </div>
-        </fieldset>
-
-        <div>
-          <label for="quantity" id="quantityLabel">જથ્થો (કિગ્રા.) *</label>
-          <input
-            id="quantity"
-            type="number"
-            min="0"
-            step="0.001"
-            placeholder="25"
-            required
-          >
-        </div>
-
-        <div>
           <label for="netPrice">નેટ ભાવ (₹) *</label>
           <input
             id="netPrice"
@@ -210,52 +174,37 @@
       $("message").textContent = message;
     }
 
-    function categoryUnit(name) {
-      const category = categories.find(item => item.name === name);
-      return category ? category.unit : "kg";
+    function getUniqueCompanies() {
+      const companySet = new Set();
+      products.forEach(product => companySet.add(product.company));
+      return Array.from(companySet).sort((a, b) => a.localeCompare(b, "gu"));
     }
 
-    function setUnit(unit) {
-      const value = UNITS[unit] ? unit : "kg";
-
-      $("productForm").elements.unit.value = value;
-      $("quantityLabel").textContent = `જથ્થો (${UNITS[value].short}) *`;
-      $("quantity").step = UNITS[value].step;
-    }
-
-    function renderCategoryOptions() {
-      const filter = $("categoryFilter");
+    function renderCompanyFilter() {
+      const filter = $("companyFilter");
       const current = filter.value;
 
-      filter.replaceChildren(new Option("બધી કેટેગરી", ""));
-      categories.forEach(category => {
-        filter.add(new Option(category.name, category.name));
+      filter.replaceChildren(new Option("બધી કંપનીઓ", ""));
+      getUniqueCompanies().forEach(company => {
+        filter.add(new Option(company, company));
       });
-      filter.value = categories.some(item => item.name === current)
-        ? current
-        : "";
-
-      const select = $("category");
-      select.replaceChildren();
-      categories.forEach(category => {
-        select.add(new Option(category.name, category.name));
-      });
+      filter.value = getUniqueCompanies().includes(current) ? current : "";
     }
 
     function renderProducts() {
       const tbody = $("productTable");
       const search = $("searchInput").value.trim().toLocaleLowerCase();
-      const category = $("categoryFilter").value;
+      const companyFilter = $("companyFilter").value;
 
       const filtered = products.filter(product => {
         const matchesSearch =
           product.name.toLocaleLowerCase().includes(search) ||
           product.company.toLocaleLowerCase().includes(search);
 
-        const matchesCategory =
-          !category || product.category === category;
+        const matchesCompany =
+          !companyFilter || product.company === companyFilter;
 
-        return matchesSearch && matchesCategory;
+        return matchesSearch && matchesCompany;
       });
 
       tbody.replaceChildren();
@@ -264,7 +213,7 @@
         const row = document.createElement("tr");
         const cell = document.createElement("td");
 
-        cell.colSpan = 7;
+        cell.colSpan = 5;
         cell.className = "empty";
         cell.textContent = "કોઈ વસ્તુ મળી નથી.";
 
@@ -276,8 +225,6 @@
         "ક્રમ",
         "કંપનીનું નામ",
         "વસ્તુનું નામ",
-        "કેટેગરી",
-        "જથ્થો",
         "નેટ ભાવ (₹)",
         "ક્રિયા"
       ];
@@ -289,8 +236,6 @@
           index + 1,
           product.company,
           product.name,
-          product.category,
-          formatQuantity(product),
           formatCurrency(product.netPrice)
         ];
 
@@ -304,7 +249,7 @@
         });
 
         const actionCell = document.createElement("td");
-        actionCell.dataset.label = columnLabels[6];
+        actionCell.dataset.label = columnLabels[4];
 
         const actions = document.createElement("div");
         actions.className = "actions";
@@ -331,17 +276,11 @@
 
       $("formTitle").textContent = "નવી વસ્તુ ઉમેરો";
       $("saveButton").textContent = "+ વસ્તુ ઉમેરો";
-
-      setUnit(categoryUnit($("category").value));
     }
 
     function openModal() {
       $("productModal").showModal();
       $("company").focus();
-
-      if (categories.length === 0) {
-        showFormError("પહેલાં કેટેગરી ઉમેરો (ઉપર \"+ નવી કેટેગરી\" લિંક).");
-      }
     }
 
     $("addButton").addEventListener("click", () => {
@@ -349,51 +288,27 @@
       openModal();
     });
 
-    // Picking a category pre-selects its default unit.
-    $("category").addEventListener("change", () => {
-      setUnit(categoryUnit($("category").value));
-    });
 
-    $("productForm").addEventListener("change", (event) => {
-      if (event.target.name === "unit") setUnit(event.target.value);
-    });
 
     $("productForm").addEventListener("submit", function(event) {
       event.preventDefault();
 
       const company = $("company").value.trim();
       const name = $("productName").value.trim();
-      const category = $("category").value;
-      const unit = $("productForm").elements.unit.value;
-      const quantity = Number($("quantity").value);
       const netPrice = Number($("netPrice").value);
-
-      if (!category) {
-        showFormError("કૃપા કરીને કેટેગરી પસંદ કરો.");
-        return;
-      }
 
       if (
         !company ||
         !name ||
-        !UNITS[unit] ||
-        $("quantity").value.trim() === "" ||
         $("netPrice").value.trim() === "" ||
-        !Number.isFinite(quantity) ||
         !Number.isFinite(netPrice) ||
-        quantity < 0 ||
         netPrice < 0
       ) {
         showFormError("કૃપા કરીને બધી માહિતી યોગ્ય રીતે ભરો.");
         return;
       }
 
-      if (unit === "piece" && !Number.isInteger(quantity)) {
-        showFormError("નંગ પૂર્ણ સંખ્યામાં લખો (દા.ત. 10).");
-        return;
-      }
-
-      const fields = { company, name, category, unit, quantity, netPrice };
+      const fields = { company, name, netPrice };
       let nextProducts;
 
       if (editingId !== null) {
@@ -417,6 +332,7 @@
         : "નવી વસ્તુ સફળતાપૂર્વક ઉમેરાઈ છે.";
 
       $("productModal").close();
+      renderCompanyFilter();
       renderProducts();
       showMessage("listMessage", message);
     });
@@ -431,9 +347,6 @@
 
       $("company").value = product.company;
       $("productName").value = product.name;
-      $("category").value = product.category;
-      setUnit(product.unit);
-      $("quantity").value = product.quantity;
       $("netPrice").value = product.netPrice;
 
       $("formTitle").textContent = "વસ્તુની માહિતી એડિટ કરો";
@@ -461,6 +374,7 @@
       }
 
       products = nextProducts;
+      renderCompanyFilter();
       renderProducts();
       showMessage("listMessage", "વસ્તુ સફળતાપૂર્વક ડિલીટ થઈ ગઈ છે.");
     }
@@ -473,7 +387,7 @@
 
     $("searchInput").addEventListener("input", renderProducts);
 
-    $("categoryFilter").addEventListener("change", renderProducts);
+    $("companyFilter").addEventListener("change", renderProducts);
 
     $("resetDemo").addEventListener("click", () => {
       const confirmed = confirm(
@@ -498,7 +412,7 @@
       products = nextProducts;
       categories = nextCategories;
 
-      renderCategoryOptions();
+      renderCompanyFilter();
       renderProducts();
       showMessage("listMessage", "ડેમો ડેટા ફરીથી લોડ થઈ ગયો છે.");
     });
@@ -516,7 +430,7 @@
       );
     }
 
-    renderCategoryOptions();
+    renderCompanyFilter();
     renderProducts();
   </script>
 </body>

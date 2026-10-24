@@ -30,8 +30,8 @@
 }
 
 .search-bar input:focus {
-  border-color: #16845b;
-  box-shadow: 0 0 0 4px #16a34a18;
+  border-color: #475569;
+  box-shadow: 0 0 0 4px #47556918;
 }
 
 .search-stats {
@@ -70,8 +70,8 @@
 }
 
 .company-card:hover {
-  border-color: #16845b;
-  box-shadow: 0 6px 24px #16a34a12;
+  border-color: #475569;
+  box-shadow: 0 6px 24px #47556912;
   transform: translateY(-2px);
 }
 
@@ -138,8 +138,8 @@
 }
 
 .chip-count {
-  background: #dcfce7;
-  color: #166534;
+  background: #e2e8f0;
+  color: #334155;
 }
 
 .chip-value {
@@ -156,7 +156,7 @@
 }
 
 .company-card:hover .card-arrow {
-  color: #16734d;
+  color: #334155;
   transform: translateX(3px);
 }
 
@@ -260,7 +260,7 @@
 .detail-title-row h2 {
   margin: 0;
   font-size: 20px;
-  color: #123b30;
+  color: #1e293b;
 }
 
 .detail-meta {

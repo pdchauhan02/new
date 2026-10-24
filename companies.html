@@ -96,8 +96,6 @@
             <tr>
               <th>ક્રમ</th>
               <th>વસ્તુનું નામ</th>
-              <th>કેટેગરી</th>
-              <th>જથ્થો (વજન / નંગ)</th>
               <th>નેટ ભાવ (₹)</th>
               <th>ક્રિયા</th>
             </tr>
@@ -105,7 +103,7 @@
 
           <tbody id="companyProductTable">
             <tr>
-              <td colspan="6" class="empty">કોઈ વસ્તુ નથી.</td>
+              <td colspan="4" class="empty">કોઈ વસ્તુ નથી.</td>
             </tr>
           </tbody>
         </table>
@@ -163,39 +161,7 @@
           >
         </div>
 
-        <div>
-          <div class="label-row">
-            <label for="category">કેટેગરી *</label>
-            <a class="field-link" href="categories.html">+ નવી કેટેગરી</a>
-          </div>
-          <select id="category" required></select>
-        </div>
 
-        <fieldset class="unit-toggle">
-          <legend>એકમ *</legend>
-          <div class="unit-options">
-            <label>
-              <input type="radio" name="unit" value="kg" checked>
-              <span>વજન (કિગ્રા.)</span>
-            </label>
-            <label>
-              <input type="radio" name="unit" value="piece">
-              <span>નંગ</span>
-            </label>
-          </div>
-        </fieldset>
-
-        <div>
-          <label for="quantity" id="quantityLabel">જથ્થો (કિગ્રા.) *</label>
-          <input
-            id="quantity"
-            type="number"
-            min="0"
-            step="0.001"
-            placeholder="25"
-            required
-          >
-        </div>
 
         <div>
           <label for="netPrice">નેટ ભાવ (₹) *</label>
@@ -240,25 +206,7 @@
       $("message").textContent = message;
     }
 
-    function categoryUnit(name) {
-      const category = categories.find(item => item.name === name);
-      return category ? category.unit : "kg";
-    }
 
-    function setUnit(unit) {
-      const value = UNITS[unit] ? unit : "kg";
-      $("productForm").elements.unit.value = value;
-      $("quantityLabel").textContent = `જથ્થો (${UNITS[value].short}) *`;
-      $("quantity").step = UNITS[value].step;
-    }
-
-    function renderCategoryOptions() {
-      const select = $("category");
-      select.replaceChildren();
-      categories.forEach(category => {
-        select.add(new Option(category.name, category.name));
-      });
-    }
 
     function getInitials(name) {
       return name
@@ -289,14 +237,12 @@
           map.set(key, {
             name: key,
             count: 0,
-            totalValue: 0,
-            categories: new Set()
+            totalValue: 0
           });
         }
         const entry = map.get(key);
         entry.count++;
         entry.totalValue += product.netPrice;
-        entry.categories.add(product.category);
       });
 
       return Array.from(map.values()).sort((a, b) =>
@@ -427,7 +373,7 @@
       if (companyProducts.length === 0) {
         const row = document.createElement("tr");
         const cell = document.createElement("td");
-        cell.colSpan = 6;
+        cell.colSpan = 4;
         cell.className = "empty";
         cell.textContent = "આ કંપનીની કોઈ વસ્તુ નથી.";
         row.appendChild(cell);
@@ -438,8 +384,6 @@
       const columnLabels = [
         "ક્રમ",
         "વસ્તુનું નામ",
-        "કેટેગરી",
-        "જથ્થો",
         "નેટ ભાવ (₹)",
         "ક્રિયા"
       ];
@@ -450,8 +394,6 @@
         const values = [
           index + 1,
           product.name,
-          product.category,
-          formatQuantity(product),
           formatCurrency(product.netPrice)
         ];
 
@@ -463,7 +405,7 @@
         });
 
         const actionCell = document.createElement("td");
-        actionCell.dataset.label = columnLabels[5];
+        actionCell.dataset.label = columnLabels[3];
 
         const actions = document.createElement("div");
         actions.className = "actions";
@@ -493,17 +435,13 @@
       $("formTitle").textContent = "નવી વસ્તુ ઉમેરો";
       $("saveButton").textContent = "+ વસ્તુ ઉમેરો";
       $("company").readOnly = false;
-
-      setUnit(categoryUnit($("category").value));
     }
 
     function openModal() {
       $("productModal").showModal();
       $("company").focus();
 
-      if (categories.length === 0) {
-        showFormError("પહેલાં કેટેગરી ઉમેરો (ઉપર \"+ નવી કેટેગરી\" લિંક).");
-      }
+
     }
 
     // "Add product for this company" button
@@ -517,50 +455,27 @@
       $("productName").focus();
     });
 
-    $("category").addEventListener("change", () => {
-      setUnit(categoryUnit($("category").value));
-    });
 
-    $("productForm").addEventListener("change", (event) => {
-      if (event.target.name === "unit") setUnit(event.target.value);
-    });
 
     $("productForm").addEventListener("submit", function(event) {
       event.preventDefault();
 
       const company = $("company").value.trim();
       const name = $("productName").value.trim();
-      const category = $("category").value;
-      const unit = $("productForm").elements.unit.value;
-      const quantity = Number($("quantity").value);
       const netPrice = Number($("netPrice").value);
-
-      if (!category) {
-        showFormError("કૃપા કરીને કેટેગરી પસંદ કરો.");
-        return;
-      }
 
       if (
         !company ||
         !name ||
-        !UNITS[unit] ||
-        $("quantity").value.trim() === "" ||
         $("netPrice").value.trim() === "" ||
-        !Number.isFinite(quantity) ||
         !Number.isFinite(netPrice) ||
-        quantity < 0 ||
         netPrice < 0
       ) {
         showFormError("કૃપા કરીને બધી માહિતી યોગ્ય રીતે ભરો.");
         return;
       }
 
-      if (unit === "piece" && !Number.isInteger(quantity)) {
-        showFormError("નંગ પૂર્ણ સંખ્યામાં લખો (દા.ત. 10).");
-        return;
-      }
-
-      const fields = { company, name, category, unit, quantity, netPrice };
+      const fields = { company, name, netPrice };
       let nextProducts;
 
       if (editingId !== null) {
@@ -608,9 +523,6 @@
 
       $("company").value = product.company;
       $("productName").value = product.name;
-      $("category").value = product.category;
-      setUnit(product.unit);
-      $("quantity").value = product.quantity;
       $("netPrice").value = product.netPrice;
 
       $("formTitle").textContent = "વસ્તુની માહિતી એડિટ કરો";
@@ -668,7 +580,6 @@
         "સેવ કરેલો ડેટા વાંચી શકાયો નથી.";
     }
 
-    renderCategoryOptions();
     renderCompanyGrid();
   </script>
 </body>

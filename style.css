@@ -11,7 +11,7 @@ body {
 
 /* Top navigation */
 .topnav {
-  background: #123b30;
+  background: #1e293b;
 }
 
 .topnav-inner {
@@ -39,7 +39,7 @@ body {
 }
 
 .nav-links a {
-  color: #d1fae5;
+  color: #cbd5e1;
   text-decoration: none;
   padding: 8px 14px;
   border-radius: 7px;
@@ -53,7 +53,7 @@ body {
 
 .nav-links a[aria-current="page"] {
   background: white;
-  color: #123b30;
+  color: #1e293b;
 }
 
 .container {
@@ -74,7 +74,7 @@ header {
 h1 {
   margin: 0;
   font-size: 26px;
-  color: #123b30;
+  color: #1e293b;
 }
 
 .subtitle {
@@ -128,7 +128,7 @@ label {
 .field-link {
   font-size: 13px;
   font-weight: 600;
-  color: #16734d;
+  color: #475569;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -155,8 +155,8 @@ input, select {
 }
 
 input:focus, select:focus {
-  border-color: #16845b;
-  box-shadow: 0 0 0 3px #16a34a15;
+  border-color: #475569;
+  box-shadow: 0 0 0 3px #47556920;
 }
 
 /* Unit toggle: વજન / નંગ */
@@ -212,13 +212,13 @@ input:focus, select:focus {
 }
 
 .unit-options input:checked + span {
-  background: #dcfce7;
-  border-color: #16734d;
-  color: #166534;
+  background: #e2e8f0;
+  border-color: #334155;
+  color: #1e293b;
 }
 
 .unit-options input:focus-visible + span {
-  box-shadow: 0 0 0 3px #16a34a40;
+  box-shadow: 0 0 0 3px #47556940;
 }
 
 .unit-tag {
@@ -252,7 +252,7 @@ button {
 }
 
 .btn-primary {
-  background: #16734d;
+  background: #334155;
   color: white;
 }
 
@@ -357,7 +357,7 @@ td {
 .message {
   margin-top: 14px;
   font-size: 13px;
-  color: #166534;
+  color: #334155;
   min-height: 20px;
 }
 
